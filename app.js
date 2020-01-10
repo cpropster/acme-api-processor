@@ -31,7 +31,7 @@ const groupCompaniesByState = (companies) => {
   }, {});
 };
 
-//something wrong with the below
+//need map to filter somehow will finish tomorrow
 const processedOfferings = (companies, products, offerings) => {
   return offerings.map((offering) => {
     return products.map((product) => {
@@ -58,16 +58,17 @@ const findCompaniesByOfferings = (companies, offerings, minimum) => {
   });
 };
 
-//too late need to finish this and the other 'processed' function
 const processedProducts = (products, offerings) => {
   return products.map((product) => {
-    return offerings.map((offering) => {
-      if (product.id === offering.productId) {
-        let priceSum = 0;
-        priceSum += offering.price;
-        product["offeringPriceAvg"] = priceSum;
-      }
+    const relevantOfferings = offerings.filter((offering) => {
+      return product.id === offering.productId;
     });
+    const avgPrice =
+      relevantOfferings.reduce((acc, offering) => {
+        return acc + offering.price;
+      }, 0) / relevantOfferings.length;
+
+    return [product, avgPrice];
   });
 };
 
